@@ -1,4 +1,5 @@
-const yup = require("yup");
+import { Request, Response, NextFunction } from 'express';
+import * as yup from 'yup';
 
 const loginSchema = yup.object({
   body: yup.object({
@@ -7,7 +8,7 @@ const loginSchema = yup.object({
   })
 });
 
-const validateLogin = () => async (req, res, next) => {
+export const validateLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await loginSchema.validate({
       body: req.body,
@@ -15,10 +16,9 @@ const validateLogin = () => async (req, res, next) => {
       params: req.params,
     });
     return next();
-  } catch (err) {
+  } catch (err: any) {
       return res.status(500).json({ type: err.name, message: err.message });
   }
 };
 
-module.exports = validateLogin;
   

@@ -1,19 +1,26 @@
-require("dotenv").config();
-const jwt = require('jsonwebtoken');
-const auth = require("./middlewares/auth.middleware");
-const validateLogin = require("./middlewares/validateLogin.middleware");
+import jwt from 'jsonwebtoken';
+import express, { Request, Response } from 'express';
+import { validateLogin } from './middlewares/validateLogin.middleware';
+import { verifyToken } from './middlewares/auth.middleware';
 
-const express = require("express");
+const dotenv = require('dotenv');
+dotenv.config()
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
-app.post("/login", validateLogin(), (req, res) => {
+app.post("/login", validateLogin, (req: Request, res: Response) => {
     console.log('Login');
 
     try {
-        var user = {};
+        var user: {
+          token: string;
+        } = {
+          token: ''
+        };
         const { cuil, password } = req.body;
     
         // Validate user input
@@ -25,9 +32,11 @@ app.post("/login", validateLogin(), (req, res) => {
         // user = await User.findOne({ email });
     
         // if (user && (await bcrypt.compare(password, user.password))) {
+
+        
           // Create token
           const token = jwt.sign(
-            { user_id: 1, cuil },
+            { id: 1, cuil },
             process.env.TOKEN_KEY,
             {
               expiresIn: "2h",
@@ -44,9 +53,9 @@ app.post("/login", validateLogin(), (req, res) => {
     }
 });
 
-
-app.get("/welcome", auth, (req, res) => {
-  res.status(200).send("Welcome 🙌 ");
+app.get("/welcome", verifyToken, (req: Request, res: Response) => {
+  req.user;
+  res.status(200).send(`Welcome 🙌 ${req.user.cuil}`);
 });
 
 module.exports = app;
