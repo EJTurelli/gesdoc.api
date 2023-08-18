@@ -1,16 +1,14 @@
 namespace NodeJS {
     interface ProcessEnv {
         API_PORT: number;
-        TOKEN_KEY: string;
         NODE_ENV: string;
-    }
-}
-
-declare global {
-    namespace Express {
-        interface Request {
-            cuil: string;
-        }
+        DB_HOST: string;
+        DB_PORT: number;
+        DB_USER: string;
+        DB_PASSWORD: string;
+        DB_DATABASE: string;
+        PASS_SALT_ROUNDS: number;
+        TOKEN_KEY: string;
     }
 }
 

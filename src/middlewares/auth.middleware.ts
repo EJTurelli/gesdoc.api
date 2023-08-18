@@ -1,25 +1,27 @@
 import * as jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express';
-
-
-const dotenv = require('dotenv');
-dotenv.config()
+import { findActiveUserByCuil } from '../services/user.service';
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers["x-access-token"] as string;
 
   if (!token) {
-    return res.status(403).send("Invalid Token");
+    return res.status(401).send({'message': 'Unauthorized'});
   }
   try {
-    const decoded = jwt.verify(token, process.env.TOKEN_KEY) as { userId: number, cuil: string, iat: number, exp: number };
-
-    req.user = {cuil: decoded.cuil, id: decoded.userId};
-
-    // levanto el dato de la base de datos y agrego a la req el user
-
+    const { cuil } = jwt.verify(token, process.env.TOKEN_KEY) as { cuil: string, iat: number, exp: number };
+    
+    findActiveUserByCuil(cuil)
+      .then(user => {
+        req.user = user;
+        return next();
+      })
+      .catch((err) => {
+        const msg = err.message;
+        return res.status(404).send({'message': msg});
+      });
+ 
   } catch (err) {
-    return res.status(401).send("Invalid Token");
+    return res.status(401).send({'message': 'Unauthorized'});
   }
-  return next();
 };
