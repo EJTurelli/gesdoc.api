@@ -17,7 +17,7 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
     });
     return next();
   } catch (err: any) {
-      return res.status(500).json({ type: err.name, message: err.message });
+      return res.status(500).json({ message: err.message });
   }
 };
 
