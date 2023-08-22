@@ -17,8 +17,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         return next();
       })
       .catch((err) => {
-        const msg = err.message;
-        return res.status(404).send({'message': msg});
+        return res.status(404).send({'message': err.message});
       });
  
   } catch (err) {
