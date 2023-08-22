@@ -3,6 +3,10 @@ import express, { Request, Response } from 'express';
 import { verifyToken } from "./middlewares/auth.middleware";
 import { validateLogin } from "./middlewares/validateLogin.middleware";
 import { login } from "./controllers/login.controller";
+import { getFile, getFiles, postFile } from './controllers/files.controller';
+import { validateDownload } from './middlewares/validateDownload.middleware';
+import { validateAdmin } from './middlewares/validateAdmin.middleware';
+import { validateUpload } from './middlewares/validateUpload.middleware';
 
 const router = express.Router();
 
@@ -25,17 +29,11 @@ export const routes = (app: any) => {
     res.status(200).json({'Email': req.user.surname});
   });
 
-  router.get("/document", verifyToken, (req: Request, res: Response) => {
-    res.status(200).json({'Document': req.user.surname});
-  });
+  router.get("/documents", verifyToken, (req: Request, res: Response) => getFiles(req, res));
 
-  router.get("/document/:hash", verifyToken, (req: Request, res: Response) => {
-    res.status(200).json({'Document': req.params.hash});
-  });
+  router.get("/document", [verifyToken, validateDownload], (req: Request, res: Response) => getFile(req, res));
 
-  router.post("/document", verifyToken, (req: Request, res: Response) => {
-    res.status(200).json({'Document': req.user.surname});
-  });
+  router.post("/document", [verifyToken, validateAdmin, validateUpload], (req: Request, res: Response) => postFile(req, res));
 
   app.use(router);
 };
