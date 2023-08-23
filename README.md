@@ -20,3 +20,9 @@ Api del proyecto Gesdoc
 * FILES_SALT_ROUNDS = Salt rounds para generar el hash de los documentos
 * TOKEN_KEY = clave para generar el JWT
 * BASE_PATH = path a la raiz del proyecto, se utiliza para la subida y bajada de archivos
+
+### Documentos
+
+Dentro de ```BASE_PATH/static/files``` se crean carpetas cuyos nombres serán los cuil de cada usuario, en las mismas se deben depositar los documentos correspondientes a cada uno.
+
+
