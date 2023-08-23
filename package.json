@@ -4,8 +4,8 @@
   "description": "Api del proyecto Gesdoc",
   "main": "./src/index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon --watch \"*.ts\" --exec \"ts-node\" --files ./src/index.ts",
+    "start": "BASE_PATH=. node ./src/index.js",
+    "dev": "BASE_PATH=. nodemon --watch \"*.ts\" --exec \"ts-node\" --files ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +15,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.0",
     "yup": "^1.2.0"
   },
@@ -22,6 +23,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/multer": "^1.4.7",
     "@types/node": "^20.5.0",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
