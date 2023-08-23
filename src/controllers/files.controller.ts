@@ -6,7 +6,7 @@ import { upload } from "../services/files.service";
 
 export const getFiles = async (req: Request, res: Response) => {
 
-    const directoryPath = process.env.NODE_PATH + `/static/files/${req.user.cuil}`;
+    const directoryPath = process.env.BASE_PATH + `/static/files/${req.user.cuil}`;
 
     fs.readdir(directoryPath!, async function (err, files) {
         if (err) {
@@ -34,7 +34,7 @@ export const getFiles = async (req: Request, res: Response) => {
 
 export const getFile = async (req: Request, res: Response) => {
 
-    const directoryPath = process.env.NODE_PATH + `/static/files/${req.user.cuil}`;
+    const directoryPath = process.env.BASE_PATH + `/static/files/${req.user.cuil}`;
 
     fs.readdir(directoryPath!, async function (err, files) {
         if (err) {
@@ -48,9 +48,7 @@ export const getFile = async (req: Request, res: Response) => {
 
                 res.download(directoryPath + '/'+ file, file, (err) => {
                     if (err) {
-                      res.status(500).send({
-                        message: "Could not download the file. " + err,
-                      });
+                      res.status(500).send({message: "Could not download the file. " + err});
                     }
                   });
                 return;

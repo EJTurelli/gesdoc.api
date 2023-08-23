@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as yup from 'yup';
 
-const loginSchema = yup.object({
+const downloadSchema = yup.object({
   query: yup.object({
     hash: yup.string().required(),
   })
@@ -9,7 +9,7 @@ const loginSchema = yup.object({
 
 export const validateDownload = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await loginSchema.validate({
+    await downloadSchema.validate({
       body: req.body,
       query: req.query,
       params: req.params,
