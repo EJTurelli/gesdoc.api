@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 var is = require('type-is');
 import * as yup from 'yup';
 
-const loginSchema = yup.object({
-  query: yup.object({
+const uploadSchema = yup.object({
+  params: yup.object({
     cuil: yup.string().min(11).max(11).required()
   }),
 });
@@ -14,7 +14,7 @@ export const validateUpload = async (req: Request, res: Response, next: NextFunc
       return res.status(403).send({message: 'Please provide a file'});
     }
 
-    await loginSchema.validate({
+    await uploadSchema.validate({
       body: req.body,
       query: req.query,
       params: req.params,

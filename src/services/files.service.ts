@@ -14,7 +14,7 @@ export const upload = multer({
   limits: { fileSize: maxSize, files: 1 },
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, process.env.NODE_PATH + `/static/files/${req.query.cuil}`);
+      cb(null, process.env.BASE_PATH + `/static/files/${req.params.cuil}`);
     },
     filename: (req, file, cb) => {
       cb(null, file.originalname);
