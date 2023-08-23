@@ -63,7 +63,7 @@ export const postFile = async (req: Request, res: Response) => {
         upload(req, res, async (err) => {
             try {
                 if (err) {
-                    res.status(422).send({'message': `Unable to upload file for cuil ${req.query.cuil}!`});
+                    res.status(422).send({'message': `Unable to upload file for cuil ${req.params.cuil}!`});
                     return;
                 }
 
