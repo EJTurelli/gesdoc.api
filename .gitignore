@@ -1,3 +1,7 @@
+# app
+static/files/*
+!static/files/.gitkeep
+
 # Logs
 logs
 *.log
