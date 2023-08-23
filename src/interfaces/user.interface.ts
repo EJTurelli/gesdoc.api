@@ -4,6 +4,25 @@ export interface IUser {
     name: string;
     cuil: string;
     email: string;
-    status: boolean;
+    status: string;
     rol: string;
 }
+
+export interface IUserSearch {
+    surname?: string;
+    name?: string;
+    cuil?: string;
+    email?: string;
+    status?: string;
+    rol?: string;
+}
+
+export enum UserRol {
+    administrator = 'administrador',
+    official = 'funcionario',
+};
+
+export enum UserStatus {
+    enabled = 'habilitado',
+    disabled = 'deshabilitado',
+};
