@@ -8,6 +8,7 @@ namespace NodeJS {
         DB_PASSWORD: string;
         DB_DATABASE: string;
         PASS_SALT_ROUNDS: number;
+        FILES_SALT_ROUNDS: number;
         TOKEN_KEY: string;
     }
 }
