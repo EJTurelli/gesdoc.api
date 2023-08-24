@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as yup from 'yup';
+import { yupValidate } from '../helpers/yupValidate.helper';
 
 const downloadSchema = yup.object({
   query: yup.object({
@@ -8,16 +9,7 @@ const downloadSchema = yup.object({
 });
 
 export const validateDownload = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await downloadSchema.validate({
-      body: req.body,
-      query: req.query,
-      params: req.params,
-    });
-    return next();
-  } catch (err: any) {
-      return res.status(500).json({ message: err.message });
-  }
+  return yupValidate(req, res, next, downloadSchema);
 };
 
   
