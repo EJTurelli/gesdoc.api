@@ -7,8 +7,9 @@ import { getFile, getFiles, postFile } from './controllers/files.controller';
 import { validateDownload } from './middlewares/validateDownload.middleware';
 import { validateAdmin } from './middlewares/validateAdmin.middleware';
 import { validateUpload } from './middlewares/validateUpload.middleware';
-import { getUsers } from './controllers/users.controller';
+import { getUsers, postUser } from './controllers/users.controller';
 import { validateGetUsers } from './middlewares/validateGetUsers.middleware';
+import { isHashValid, postPass } from './controllers/pass.controller';
 
 const router = express.Router();
 
@@ -17,13 +18,15 @@ export const routes = (app: any) => {
 
   router.get("/user", [verifyToken, validateGetUsers], (req: Request, res: Response) => getUsers(req, res));
 
-  router.post("/user", verifyToken, (req: Request, res: Response) => {
-    res.status(200).json({'User': req.user.surname});
-  });
+  router.post("/user", verifyToken, (req: Request, res: Response) => postUser(req, res));
 
   router.put("/user", verifyToken, (req: Request, res: Response) => {
     res.status(200).json({'User': req.user.surname});
   });
+
+  router.get("/hash/:hash", (req: Request, res: Response) => isHashValid(req, res));
+
+  router.post("/pass/:hash", (req: Request, res: Response) => postPass(req, res));
 
   router.post("/email", verifyToken, (req: Request, res: Response) => {
     res.status(200).json({'Email': req.user.surname});
