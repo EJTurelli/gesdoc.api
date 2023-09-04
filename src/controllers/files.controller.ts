@@ -1,7 +1,7 @@
 import fs from "fs";
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { getFileHash } from "../services/encript.service";
+import { createHash } from "../services/encript.service";
 import { upload } from "../services/files.service";
 
 export const getFiles = async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export const getFiles = async (req: Request, res: Response) => {
         const fileInfos: { name: string, fileHash: string }[] = [];
 
         for await (const file of files) {
-            var fileHash = await getFileHash(file);
+            var fileHash = await createHash(file);
 
             if (fileHash) {
                 fileInfos.push({
