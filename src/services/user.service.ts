@@ -1,6 +1,9 @@
-import { RowDataPacket } from "mysql2";
+import fs from "fs";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../db";
-import { IUser, IUserSearch, UserStatus } from "../interfaces/user.interface";
+import { IUser, IUserData, UserStatus } from "../interfaces/user.interface";
+import { MailType, sendMail } from "./mail.service";
+import { resetPass } from "./pass.service";
 
 export const findActiveUserByCuil = (cuil: string): Promise<IUser | void> => {
 
@@ -10,7 +13,7 @@ export const findActiveUserByCuil = (cuil: string): Promise<IUser | void> => {
         try {
             pool.query(query, function(error, rows: RowDataPacket[]) {
         
-                if (error) return reject(error);
+                if (error) return reject(error.code);      
                 if (rows.length <= 0) return reject('Not found');             
           
                 const user: IUser = {
@@ -39,7 +42,7 @@ export const findHashForActiveUserByCuil = (cuil: string): Promise<string | void
         try {
             pool.query(query, function(error, rows: RowDataPacket[]) {
         
-                if (error) return reject(error);
+                if (error) return reject(error.code);      
                 if (rows.length <= 0) return reject('Not found');
           
                 const hash: string = rows[0].hash;      
@@ -51,7 +54,7 @@ export const findHashForActiveUserByCuil = (cuil: string): Promise<string | void
     });
 }
 
-export const findAllUsers = (search: IUserSearch): Promise<IUser[] | []> => {
+export const findAllUsers = (search: IUserData): Promise<IUser[] | []> => {
 
     var where = '';
     if (search.surname) where += `${where.length?' AND':''} surname LIKE '%${search.surname}%'`;
@@ -68,7 +71,7 @@ export const findAllUsers = (search: IUserSearch): Promise<IUser[] | []> => {
         try {
             pool.query(query, function(error, rows: RowDataPacket[]) {
         
-                if (error) return reject(error);
+                if (error) return reject(error.code);      
                 if (rows.length <= 0) return reject('Not found');             
 
                 for (let i = 0; i < rows.length; i++) {
@@ -86,6 +89,48 @@ export const findAllUsers = (search: IUserSearch): Promise<IUser[] | []> => {
                 }
                        
                 return resolve(users);
+            });                            
+        } catch (error) {
+            return reject('Error database');
+        }
+    });
+}
+
+export const createUser = (user: IUserData): Promise<void> => {
+
+    const folder = process.env.BASE_PATH + `/static/files/${user.cuil}`;
+
+    // Creo carpeta para gestión de archivos
+    try {
+        if (!fs.existsSync(folder)){
+            fs.mkdirSync(folder);
+        }            
+    } catch (error) {
+        return new Promise((resolve, reject) => reject('Error file system'));        
+    }
+
+    const query = `INSERT INTO users (surname, name, cuil, email, status, rol)
+        VALUES ('${user.surname}', '${user.name}', '${user.cuil}', '${user.email}', '${user.status}', '${user.rol}');`;
+
+    return new Promise((resolve, reject) => {
+        try {
+            pool.query(query, async function(error, result: ResultSetHeader) { 
+
+                if (error) return reject(error.code);      
+                
+                var userFull: IUser = {
+                    id: result.insertId,
+                    surname: user.surname!,
+                    name: user.name!,
+                    cuil: user.cuil!,
+                    email: user.email!,
+                    status: user.status!,
+                    rol: user.rol!
+                }
+
+                const url = await resetPass(userFull);
+                if (url) sendMail(MailType.welcome, user, url);
+                return resolve();
             });                            
         } catch (error) {
             return reject('Error database');
