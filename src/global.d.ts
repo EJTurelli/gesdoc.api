@@ -7,9 +7,14 @@ namespace NodeJS {
         DB_USER: string;
         DB_PASSWORD: string;
         DB_DATABASE: string;
-        PASS_SALT_ROUNDS: number;
-        FILES_SALT_ROUNDS: number;
+        PASS_SALT_ROUNDS: string;
+        SALT_ROUNDS: string;
         TOKEN_KEY: string;
+        MX_HOST: string;
+        MX_PORT: string;
+        MX_USER: string;
+        MX_PASSWORD: string;
+        WEB_URL: string;
     }
 }
 
