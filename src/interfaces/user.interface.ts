@@ -8,7 +8,7 @@ export interface IUser {
     rol: string;
 }
 
-export interface IUserSearch {
+export interface IUserData {
     surname?: string;
     name?: string;
     cuil?: string;
