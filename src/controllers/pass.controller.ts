@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { createUser, findAllUsers } from "../services/user.service";
-import { IUserData } from '../interfaces/user.interface';
-import { isActiveResetPassByHash, setPass } from '../services/pass.service';
+import { isActiveResetPassByHash, resetPass, setPass } from '../services/pass.service';
+import { findActiveUserByCuil } from '../services/user.service';
+import { IUser } from '../interfaces/user.interface';
+import { MailType, sendMail } from '../services/mail.service';
 
 export const isHashValid = async (req: Request, res: Response) => {
 
@@ -33,5 +34,28 @@ export const postPass = async (req: Request, res: Response) => {
 
 }
 
+export const resetPassword = async (req: Request, res: Response) => {
+
+    try {
+        const user: IUser = await findActiveUserByCuil(req.body.cuil as string).catch ((err) => {
+            return res.status(500).json({ message: err });
+        }) as IUser;
+
+        if (!user) {
+            return res.status(500).json({ message: 'Error with User' });;
+        }
+
+        const url = await resetPass(user);
+        if (!url) {
+            return res.status(500).json({ message: 'Error with Password' });;
+        }
+        
+        sendMail(MailType.resetKey, user, url);       
+        return res.status(200).json();
+    } catch (err: any) {
+        return res.status(500).json({ message: err });
+    }
+
+}
 
 
