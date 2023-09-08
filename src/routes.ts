@@ -9,7 +9,10 @@ import { validateAdmin } from './middlewares/validateAdmin.middleware';
 import { validateUpload } from './middlewares/validateUpload.middleware';
 import { getUsers, postUser } from './controllers/users.controller';
 import { validateGetUsers } from './middlewares/validateGetUsers.middleware';
-import { isHashValid, postPass } from './controllers/pass.controller';
+import { isHashValid, postPass, resetPassword } from './controllers/pass.controller';
+import { validatePostUsers } from './middlewares/validatePostUsers.middleware';
+import { validatePostPass } from './middlewares/validatePostPass.middleware';
+import { validatePostPassReset } from './middlewares/validatePostPassReset.middleware';
 
 const router = express.Router();
 
@@ -18,20 +21,18 @@ export const routes = (app: any) => {
 
   router.get("/user", [verifyToken, validateGetUsers], (req: Request, res: Response) => getUsers(req, res));
 
-  router.post("/user", verifyToken, (req: Request, res: Response) => postUser(req, res));
+  router.post("/user", [verifyToken, validatePostUsers], (req: Request, res: Response) => postUser(req, res));
 
   router.put("/user", verifyToken, (req: Request, res: Response) => {
     res.status(200).json({'User': req.user.surname});
   });
 
-  router.get("/hash/:hash", (req: Request, res: Response) => isHashValid(req, res));
+  router.get("/user/hash/:hash", (req: Request, res: Response) => isHashValid(req, res));
 
-  router.post("/pass/:hash", (req: Request, res: Response) => postPass(req, res));
+  router.post("/user/pass/reset", [verifyToken, validateAdmin, validatePostPassReset], (req: Request, res: Response) => resetPassword(req, res));
 
-  router.post("/email", verifyToken, (req: Request, res: Response) => {
-    res.status(200).json({'Email': req.user.surname});
-  });
-
+  router.post("/user/pass/:hash", validatePostPass,(req: Request, res: Response) => postPass(req, res));
+  
   router.get("/document", verifyToken, (req: Request, res: Response) => getFiles(req, res));
 
   router.get("/document/download", [verifyToken, validateDownload], (req: Request, res: Response) => getFile(req, res));
