@@ -14,10 +14,6 @@ export const sendMail = (type: string, user: IUserData | IUser, hash: string) =>
   var subject = '';
   var html = '';
 
-  // async () => {
-  //   let testAccount = await nodemailer.createTestAccount();
-  // }
-
   const emailTransporter = nodemailer.createTransport({
     service:'gmail',
     auth: {
