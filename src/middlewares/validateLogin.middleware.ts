@@ -4,7 +4,8 @@ import { yupValidate } from '../helpers/yupValidate.helper';
 
 const loginSchema = yup.object({
   body: yup.object({
-    cuil: yup.string().min(11).max(11).required(),
+    cuil: yup.string().min(11).max(11).required()
+      .matches(/^\d+$/, "Must Contain only numbers"),
     password: yup.string().min(6).max(32).required(),
   })
 });

@@ -7,7 +7,7 @@ const getUsersSchema = yup.object({
   query: yup.object({
     surname:  yup.string(),
     name:  yup.string(),
-    cuil:  yup.string().max(11),
+    cuil: yup.string().max(11),
     email:  yup.string(),
     status:  yup.string().oneOf([UserStatus.enabled, UserStatus.disabled]),
     rol:  yup.string().oneOf([UserRol.administrator, UserRol.official]),
