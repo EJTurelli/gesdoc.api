@@ -11,10 +11,6 @@ export const login = async (req: Request, res: Response) => {
     try {
         const { cuil, password } = req.body;
    
-        // const salt = await bcrypt.genSalt(10);
-        // const hash = await bcrypt.hash(password, salt);
-        // console.log(hash);
-
         const hash = await findHashForActiveUserByCuil(cuil);
         if (hash) {
           const ok = await compareHash(password, hash); 
