@@ -55,8 +55,6 @@ export const sendMail = (type: string, user: IUserData | IUser, hash: string) =>
     } , function(error: any, info: { response: any; }) {
     if (error) {
       throw error;
-    } else {
-      console.log(info.response);
     }
   });
 
