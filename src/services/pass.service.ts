@@ -58,8 +58,12 @@ export const setPass = (hash: string, password: string): Promise<boolean | void>
                 const query1 = `UPDATE users SET hash='${hashPass}' WHERE id=${userId}`;
                 pool.query(query1, async function (error, rows: RowDataPacket[]) {
                     if (error) return reject(error.code);
+
+                    const query2 = `DELETE FROM password_reset WHERE hash='${hash}'`;
+                    pool.query(query2, async function (error, rows: RowDataPacket[]){});
                     return resolve(true);
                 });
+
             });                            
         } catch (error) {
             return reject('Error database');
