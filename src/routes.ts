@@ -7,25 +7,24 @@ import { getFile, getFiles, postFile } from './controllers/files.controller';
 import { validateDownload } from './middlewares/validateDownload.middleware';
 import { validateAdmin } from './middlewares/validateAdmin.middleware';
 import { validateUpload } from './middlewares/validateUpload.middleware';
-import { getUsers, postUser } from './controllers/users.controller';
+import { getUsers, postUser, putUser } from './controllers/users.controller';
 import { validateGetUsers } from './middlewares/validateGetUsers.middleware';
 import { isHashValid, postPass, resetPassword } from './controllers/pass.controller';
 import { validatePostUsers } from './middlewares/validatePostUsers.middleware';
 import { validatePostPass } from './middlewares/validatePostPass.middleware';
 import { validatePostPassReset } from './middlewares/validatePostPassReset.middleware';
+import { validatePutUsers } from './middlewares/validatePutUsers.middleware';
 
 const router = express.Router();
 
 export const routes = (app: any) => {
   router.post("/login", validateLogin, (req: Request, res: Response) => login(req, res));
 
-  router.get("/user", [verifyToken, validateGetUsers], (req: Request, res: Response) => getUsers(req, res));
+  router.get("/user", [verifyToken, validateAdmin, validateGetUsers], (req: Request, res: Response) => getUsers(req, res));
 
-  router.post("/user", [verifyToken, validatePostUsers], (req: Request, res: Response) => postUser(req, res));
+  router.post("/user", [verifyToken, validateAdmin, validatePostUsers], (req: Request, res: Response) => postUser(req, res));
 
-  router.put("/user", verifyToken, (req: Request, res: Response) => {
-    res.status(200).json({'User': req.user.surname});
-  });
+  router.put("/user/:id", [verifyToken, validateAdmin, validatePutUsers], (req: Request, res: Response) => putUser(req, res));
 
   router.get("/user/hash/:hash", (req: Request, res: Response) => isHashValid(req, res));
 
