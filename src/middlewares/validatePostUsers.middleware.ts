@@ -5,8 +5,8 @@ import { yupValidate } from '../helpers/yupValidate.helper';
 
 const postUsersSchema = yup.object({
   body: yup.object({
-    surname:  yup.string().required(),
-    name:  yup.string().required(),
+    surname:  yup.string().required().min(2),
+    name:  yup.string().required().min(2),
     cuil:  yup.string().min(11).max(11).required(),
     email:  yup.string().email().required(),
     status:  yup.string().oneOf([UserStatus.enabled, UserStatus.disabled]).required(),
