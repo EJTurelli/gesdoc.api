@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, findAllUsers } from "../services/user.service";
+import { createUser, findAllUsers, updateUser } from "../services/user.service";
 import { IUserData } from '../interfaces/user.interface';
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -61,8 +61,33 @@ export const postUser = async (req: Request, res: Response) => {
     } catch (err: any) {
         return res.status(500).json({ message: err });
     }
-
 }
 
+export const putUser = async (req: Request, res: Response) => {
 
+    try {
+        const {
+            surname,
+            name,
+            status,
+            rol,
+        } = req.body;
+
+        const { id } = req.params;
+
+        const user: IUserData = {
+            surname: surname as string,
+            name: name as string,
+            status: status as string,
+            rol: rol as string
+        };
+
+        await updateUser(parseInt(id), user);
+
+        res.send();
+        return;
+    } catch (err: any) {
+        return res.status(500).json({ message: err });
+    }
+}
 
