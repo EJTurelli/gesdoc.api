@@ -137,3 +137,28 @@ export const createUser = (user: IUserData): Promise<void> => {
         }
     });
 }
+
+export const updateUser = (userId: number, user: IUserData): Promise<void> => {
+
+    let varQuery: string = '';
+    if (user.name) { varQuery += ` name='${user.name}'`; }
+    if (user.surname) { varQuery += `${varQuery.length?',':''} surname='${user.surname}'`; }
+    if (user.rol) { varQuery += `${varQuery.length?',':''} rol='${user.rol}'`; }
+    if (user.status) { varQuery += `${varQuery.length?',':''} status='${user.status}'`; }
+
+
+    const query = `UPDATE users SET ${varQuery} WHERE id=${userId}`;
+    return new Promise((resolve, reject) => {
+        if (!varQuery.length) return reject('Error data');
+
+        try {
+            pool.query(query, async function(error, result: ResultSetHeader) { 
+                if (error) return reject(error.code);      
+
+                return resolve();
+            });                            
+        } catch (error) {
+            return reject('Error database');
+        }
+    });
+}
