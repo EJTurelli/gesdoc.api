@@ -154,6 +154,7 @@ export const updateUser = (userId: number, user: IUserData): Promise<void> => {
         try {
             pool.query(query, async function(error, result: ResultSetHeader) { 
                 if (error) return reject(error.code);      
+                if (result.affectedRows === 0) return reject('Not found');      
 
                 return resolve();
             });                            
