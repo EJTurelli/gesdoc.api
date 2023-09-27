@@ -15,12 +15,15 @@ export const sendMail = (type: string, user: IUserData | IUser, hash: string) =>
   var html = '';
 
   const emailTransporter = nodemailer.createTransport({
-    service:'gmail',
+    host: process.env.MX_HOST,
+    port: parseInt(process.env.MX_PORT),
+    secure: true,
+    debug: true,
+    connectionTimeout: 10000,
     auth: {
       user: senderMail,
       pass: process.env.MX_PASSWORD //'mlhfldultgmunuoa'
     },
-    debug: false,
     logger: true  
   });
 
