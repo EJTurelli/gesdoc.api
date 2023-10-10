@@ -30,4 +30,34 @@ Api del proyecto Gesdoc
 
 Dentro de ```BASE_PATH/static/files``` se crean carpetas cuyos nombres serán los cuil de cada usuario, en las mismas se deben depositar los documentos correspondientes a cada uno.
 
+Los documentos se retornarán ordenados de acuerdo a su nombre.
+
+
+### Banners
+
+Dentro de ```BASE_PATH/static/banners``` se deben crear carpetas cuyos nombres serán dependerán del orden del banner al que se refiere, y se deberán depositar allí los banners correspondientes a cada uno.
+
+En el siguiente Ejemplo se muestra una estructura de carpetas para 3 banners: 
+
+``` 
+.../static/banners/1
+.../static/banners/2
+.../static/banners/3
+``` 
+
+Los nombres de los banner deberán cumplir con el siguiente formato:
+
+AAAAMMDD-AAAAMMDD.extensión, donde el primer AAAAMMDD corresponde a la fecha de inicio en que el banner se comenzará a mostrar y el segundo AAAAMMDD corresponde a la última fecha en que el banner se mostrará.
+
+En el caso de que dos archivos se solapen en los períodos de muestra para el mismo banner, el sistema retornará el primero que sea detectado.
+
+Las extensiones permitidas para los banners son: 
+* png
+* svg
+* gif
+* jpg
+* webp
+
+
+
 
