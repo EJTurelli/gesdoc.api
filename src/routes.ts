@@ -14,6 +14,7 @@ import { validatePostUsers } from './middlewares/validatePostUsers.middleware';
 import { validatePostPass } from './middlewares/validatePostPass.middleware';
 import { validatePostPassReset } from './middlewares/validatePostPassReset.middleware';
 import { validatePutUsers } from './middlewares/validatePutUsers.middleware';
+import { getBanner } from './controllers/banners.controller';
 
 const router = express.Router();
 
@@ -37,6 +38,8 @@ export const routes = (app: any) => {
   router.get("/document/download", [verifyToken, validateDownload], (req: Request, res: Response) => getFile(req, res));
 
   router.post("/document/:cuil", [verifyToken, validateAdmin, validateUpload], (req: Request, res: Response) => postFile(req, res));
+
+  router.get("/banner/:id", (req: Request, res: Response) => getBanner(req, res));
 
   app.use(router);
 };
