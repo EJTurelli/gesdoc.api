@@ -16,6 +16,8 @@ export const getFiles = async (req: Request, res: Response) => {
 
         const fileInfos: { name: string, fileHash: string }[] = [];
 
+        // Ordeno por nombre el listado de archivos
+        files.sort();
         for await (const file of files) {
             var fileHash = await createHash(file);
 
